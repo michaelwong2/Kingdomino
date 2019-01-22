@@ -2,10 +2,9 @@ from kingdomino import Board, Dominos
 import sys
 
 def domino_DFS(board, remaining, memo):
-    print(len(memo), flush=True)
-    print(board)
-
     if board.is_terminal():
+        if len(memo) % 1000 == 0:
+            print(board)
         return 1, 1 if board.is_filled() else 0, board.score(), board
 
     count = 0
@@ -43,14 +42,16 @@ if __name__ == '__main__':
     filled_end_states = 0
     max_score = -1
     max_board = None
-    memo = set()
 
-    unique_starts = [(0,0), (1,0), (2,0), (0,1), (1,1), (2,1), (2,2)]
+    # unique_starts = [(0,0), (1,0), (2,0), (0,1), (1,1), (2,1), (2,2)]
+    unique_starts = [(1,0), (0,0), (1,1)]
 
     for i in range(len(unique_starts)):
         x, y = unique_starts[i]
 
         print('Completed {} branches'.format(i))
+
+        memo = set()
 
         b = Board(x, y)
 

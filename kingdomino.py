@@ -1,6 +1,6 @@
 from collections import deque
 
-BOARD_SIZE = 5
+BOARD_SIZE = 3
 
 WHEAT = 0
 PLAIN = 1
@@ -155,7 +155,7 @@ class Board:
         return True
 
     def copy(self):
-        new_board = Board()
+        new_board = Board(self.starting[0], self.starting[1])
         new_board.board = [[val.copy() if val is not None else None for val in col] for col in self.board]
         return new_board
 
