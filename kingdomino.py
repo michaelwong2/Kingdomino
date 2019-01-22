@@ -69,9 +69,9 @@ class Board:
                         considered[nx][ny] = True
 
         # evaluate candidates
-        # each candidate is an empty space. Check that the moore neighborhood is clear, and for 
-        # each empty neighbor, we can add a domino with the side facing 
-
+        # each candidate is an empty space. Check that the neighborhood is clear, and for 
+        # each empty neighbor, we can add a domino with the correct side facing 
+        # (in the case of the kingdom its both sides) 
         next_states = deque()
 
         for x,y,adj_type in candidates:
@@ -108,7 +108,30 @@ class Board:
         return next_states
   
     def score(self):
-        pass
+        score = 0
+        visited = [[False] * BOARD_SIZE for _ in range(BOARD_SIZE)]
+        for x in range(BOARD_SIZE):
+            for y in range(BOARD_SIZE):
+                if self.board[x][y] is not None and self.board[x][y].crowns > 0 and not visited[x][y]:
+                    crowns, count = self._count_crowns(x,y, self.board[x][y].type, visited)
+                    score += count * crowns
+
+        return score
+
+    def _count_crowns(self, x, y, t, v):
+        crowns = self.board[x][y].crowns
+        count = 1
+
+        v[x][y] = True
+
+        for dx, dy in NEIGHBORHOOD:
+            nx, ny = x + dx, y + dy
+            if self.in_bounds(nx, ny) and self.board[nx][ny] is not None and self.board[nx][ny].type == t and not v[nx][ny]:
+                cw, co = self._count_crowns(nx, ny, t, v)
+                crowns += cw
+                count += co 
+
+        return crowns, count
 
     def in_bounds(self, x, y):
         return x >= 0 and x < BOARD_SIZE and y >= 0 and y < BOARD_SIZE
@@ -122,6 +145,13 @@ class Board:
                         if self.in_bounds(x + dx, y + dy) and self.board[x + dx][y + dy] is None:
                             return False
 
+        return True
+
+    def is_filled(self):
+        for x in range(BOARD_SIZE):
+            for y in range(BOARD_SIZE):
+                if self.board[x][y] is None:
+                    return False
         return True
 
     def copy(self):
@@ -139,6 +169,17 @@ class Board:
 
                 s += ' | ' + str(v)
             s += ' |\n'
+
+        return s
+
+    def get_hash(self):
+        s = ''
+        for x in range(BOARD_SIZE):
+            for y in range(BOARD_SIZE):
+                v = self.board[x][y]
+                if v is None:
+                    v = '.'
+                s += str(v)
 
         return s
 

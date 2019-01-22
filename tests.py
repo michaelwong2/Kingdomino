@@ -12,17 +12,19 @@ def format_board(matrix):
 
 
 if __name__ == '__main__':
-	m = [[6, 7, 7, 7, 7],
-		 [1, 7, 7, 7, 7],
-		 [1, 7, 7, 7, 7],
-		 [2, 7, 7, 7, 7],
-		 [2, 7, 7, 7, 7]]
+	m = [[6, 7, 3, 2, 7],
+		 [1, 1, 7, 1, 3],
+		 [1, 1, 3, 3, 3],
+		 [1, 2, 2, 2, 7],
+		 [1, 1, 2, 2, 7]]
 
 	b = format_board(m)
 
 	print(b)
 
-	dad = b.enumerate_next_states((Tile(1),Tile(2)))
+	print(b.is_terminal())
 
-	for d in dad:
-		print(d)
+	# dad = b.enumerate_next_states((Tile(1),Tile(2)))
+
+	# for d in dad:
+	# 	print(d)
