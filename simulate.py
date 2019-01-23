@@ -4,8 +4,9 @@ import sys
 def domino_DFS(board, remaining, memo):
     if board.is_terminal():
         if len(memo) % 1000 == 0:
+            print(memo)
             print(board)
-        return 1, 1 if board.is_filled() else 0, board.score(), board
+        return 1, 1 if board.is_complete() else 0, board.score(), board
 
     count = 0
     fcount = 0
@@ -44,7 +45,7 @@ if __name__ == '__main__':
     max_board = None
 
     # unique_starts = [(0,0), (1,0), (2,0), (0,1), (1,1), (2,1), (2,2)]
-    unique_starts = [(1,0), (0,0), (1,1)]
+    unique_starts = [(0,0), (1,0), (1,1)]
 
     for i in range(len(unique_starts)):
         x, y = unique_starts[i]

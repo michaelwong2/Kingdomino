@@ -3,8 +3,8 @@ from kingdomino import *
 def format_board(matrix):
 	b = Board()
 
-	for x in range(5):
-		for y in range(5):
+	for x in range(3):
+		for y in range(3):
 			if matrix[y][x] < 7:
 				b.set_tile(x, y, Tile(matrix[y][x]))
 	
@@ -12,8 +12,8 @@ def format_board(matrix):
 
 
 if __name__ == '__main__':
-	m = [[6, 7, 3, 2, 7],
-		 [1, 1, 7, 1, 3],
+	m = [[6, 5, 3, 2, 7],
+		 [1, 1, 3, 1, 3],
 		 [1, 1, 3, 3, 3],
 		 [1, 2, 2, 2, 7],
 		 [1, 1, 2, 2, 7]]
@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
 	print(b)
 
-	print(b.is_terminal())
+	print(b.is_complete())
 
 	# dad = b.enumerate_next_states((Tile(1),Tile(2)))
 

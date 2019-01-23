@@ -147,7 +147,7 @@ class Board:
 
         return True
 
-    def is_filled(self):
+    def is_complete(self):
         for x in range(BOARD_SIZE):
             for y in range(BOARD_SIZE):
                 if self.board[x][y] is None:
