@@ -1,30 +1,29 @@
-from kingdomino import *
+from domino import *
 
 def format_board(matrix):
-	b = Board()
+	b = DBoard()
 
 	for x in range(3):
 		for y in range(3):
 			if matrix[y][x] < 7:
-				b.set_tile(x, y, Tile(matrix[y][x]))
+				b.board[x][y] = matrix[y][x]
 	
 	return b 
 
-
 if __name__ == '__main__':
-	m = [[6, 5, 3, 2, 7],
-		 [1, 1, 3, 1, 3],
-		 [1, 1, 3, 3, 3],
-		 [1, 2, 2, 2, 7],
-		 [1, 1, 2, 2, 7]]
+	m = [[2, -1, -1, 2, -1],
+		 [2, 1, 1, 2, -1],
+		 [2, -1, -1, -1, -1],
+		 [2, -1, -1, -1, -1],
+		 [1, 1, 1, 1, -1]]
 
 	b = format_board(m)
 
 	print(b)
 
-	print(b.is_complete())
+	# print(b.is_complete())
 
-	# dad = b.enumerate_next_states((Tile(1),Tile(2)))
+	# dad = b.enumerate_next_states()
 
 	# for d in dad:
-	# 	print(d)
+		# print(d)
