@@ -138,11 +138,7 @@ def simulate_tilings(bsize):
     unique_starts = [(0,0)]
 
     if BOARD_SIZE % 2 != 0:
-        unique_starts = []
-        for x in range(BOARD_SIZE // 2 + 1):
-            for y in range(BOARD_SIZE // 2):
-                unique_starts.append((x,y))
-
+        unique_starts = [(x,y) for y in range(BOARD_SIZE//2) for x in range(BOARD_SIZE // 2 + 1)]
         unique_starts.append((BOARD_SIZE//2, BOARD_SIZE//2))
         print(unique_starts)
 

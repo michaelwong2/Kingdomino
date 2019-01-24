@@ -271,14 +271,16 @@ def domino_DFS(board, remaining, memo):
 
     return count, fcount, max_score, max_board
 
-if __name__ == '__main__':
+def simulate_all_possible_tilings():
     
     end_states = 0
     filled_end_states = 0
     max_score = -1
     max_board = None
 
-    unique_starts = [(0,0), (1,0), (1,1)]
+    unique_starts = [(x,y) for y in range(BOARD_SIZE//2) for x in range(BOARD_SIZE // 2 + 1)]
+    unique_starts.append((BOARD_SIZE//2, BOARD_SIZE//2))
+    print(unique_starts)
 
     for i in range(len(unique_starts)):
         x, y = unique_starts[i]
@@ -303,5 +305,8 @@ if __name__ == '__main__':
     print("End states that were complete tilings: {} / {}".format(filled_end_states, end_states))
     print("Maximum possible score: {}, shown below:".format(max_score))
     print(max_board)
+
+if __name__ == '__main__':
+    simulate_all_possible_tilings()
 
     
