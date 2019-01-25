@@ -107,7 +107,7 @@ class Board:
 
         return next_states
   
-    # bfs adjacent states and count crowns for clusters, then multiply
+    # bfs adjacent states and count crowns for clusters, then
     def score(self):
         score = 0
         visited = [[False] * BOARD_SIZE for _ in range(BOARD_SIZE)]
@@ -178,10 +178,8 @@ class Board:
         for x in range(BOARD_SIZE):
             for y in range(BOARD_SIZE):
                 v = self.board[x][y]
-                if v is None:
-                    v = '.'
-                s += str(v)
-
+                v = '.' if v is None else '{}[{}]'.format(v, v.crowns)
+                s += v
         return s
 
 global Dominos
@@ -236,8 +234,11 @@ Dominos = [
     (Tile(MOUNTAIN,2), Tile(WHEAT))
 ]
 
-def domino_DFS(board, remaining):
+def domino_DFS(board, remaining, memo):
     if board.is_terminal():
+        s = board.score()
+        if s > 29:
+            print(s)
         return 1, 1 if board.is_complete() else 0, board.score(), board
 
     count = 0
@@ -252,7 +253,14 @@ def domino_DFS(board, remaining):
         del new_remaining[i]
 
         for next_board in next_boards:
-            c, fc, ms, mb = domino_DFS(next_board, new_remaining)
+
+            h = next_board.get_hash()
+            if h in memo:
+                continue
+
+            c, fc, ms, mb = domino_DFS(next_board, new_remaining, memo)
+
+            memo.add(h)
 
             count += c
             fcount += fc
@@ -278,9 +286,11 @@ def simulate_all_possible_tilings():
 
         print('Completed {} branches'.format(i))
 
+        memo = set()
+
         b = Board(x, y)
 
-        e,f,m,mb = domino_DFS(b, [k for k in range(len(Dominos))])
+        e,f,m,mb = domino_DFS(b, [k for k in range(len(Dominos))], memo)
 
         end_states += e
         filled_end_states += f 
