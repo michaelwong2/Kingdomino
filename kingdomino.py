@@ -51,7 +51,7 @@ class Board:
         candidates = deque()
         
         # for each neighbor, if it has not been visited and is a tile, enqueue it
-        # if it is a empty, add it to the candidates if the curr tile is compatible 
+        # if it is empty, add it to the candidates if the curr tile is compatible 
         # with either side of the domino
         while len(q) > 0:
             x,y = q.popleft()
@@ -107,6 +107,7 @@ class Board:
 
         return next_states
   
+    # bfs adjacent states and count crowns for clusters, then multiply
     def score(self):
         score = 0
         visited = [[False] * BOARD_SIZE for _ in range(BOARD_SIZE)]
@@ -185,6 +186,9 @@ class Board:
 
 global Dominos
 Dominos = [
+    (Tile(SWAMP), Tile(MOUNTAIN,2)),
+    (Tile(SWAMP), Tile(MOUNTAIN,2)),
+    (Tile(WHEAT), Tile(MOUNTAIN,3)),
     (Tile(WHEAT), Tile(WHEAT)),
     (Tile(WHEAT), Tile(WHEAT)),
     (Tile(FOREST), Tile(FOREST)),
@@ -229,17 +233,11 @@ Dominos = [
     (Tile(WHEAT), Tile(PLAIN,2)),
     (Tile(LAKE), Tile(PLAIN,2)),
     (Tile(PLAIN), Tile(SWAMP,2)),
-    (Tile(MOUNTAIN,2), Tile(WHEAT)),
-    (Tile(SWAMP), Tile(MOUNTAIN,2)),
-    (Tile(SWAMP), Tile(MOUNTAIN,2)),
-    (Tile(WHEAT), Tile(MOUNTAIN,3))
+    (Tile(MOUNTAIN,2), Tile(WHEAT))
 ]
 
-def domino_DFS(board, remaining, memo):
+def domino_DFS(board, remaining):
     if board.is_terminal():
-        if len(memo) % 10000 == 0:
-            print('States visited:',len(memo))
-            print(board)
         return 1, 1 if board.is_complete() else 0, board.score(), board
 
     count = 0
@@ -254,14 +252,7 @@ def domino_DFS(board, remaining, memo):
         del new_remaining[i]
 
         for next_board in next_boards:
-
-            h = next_board.get_hash()
-            if h in memo:
-                continue
-
-            c, fc, ms, mb = domino_DFS(next_board, new_remaining, memo)
-
-            memo.add(h)
+            c, fc, ms, mb = domino_DFS(next_board, new_remaining)
 
             count += c
             fcount += fc
@@ -280,18 +271,16 @@ def simulate_all_possible_tilings():
 
     unique_starts = [(x,y) for y in range(BOARD_SIZE//2) for x in range(BOARD_SIZE // 2 + 1)]
     unique_starts.append((BOARD_SIZE//2, BOARD_SIZE//2))
-    print(unique_starts)
+    print('Starting tile:', unique_starts)
 
     for i in range(len(unique_starts)):
         x, y = unique_starts[i]
 
         print('Completed {} branches'.format(i))
 
-        memo = set()
-
         b = Board(x, y)
 
-        e,f,m,mb = domino_DFS(b, [k for k in range(len(Dominos))], memo)
+        e,f,m,mb = domino_DFS(b, [k for k in range(len(Dominos))])
 
         end_states += e
         filled_end_states += f 
