@@ -163,7 +163,7 @@ def simulate_tilings(bsize):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-N', '--N_size', help='board dimensiosn', type=int, default=3)
+    parser.add_argument('-N', '--N_size', help='board dimensions', type=int, default=3)
     args = parser.parse_args()
 
     simulate_tilings(args.N_size)
